@@ -1,16 +1,46 @@
-import Ukol from "./components/Ukol";
+import { useState } from "react";
 import { DummyData } from "./data/ukoly";
+import PridaniUkolu from "./components/PridaniUkolu";
+import UkolList from "./components/UkolList";
 
 function App() {
+  const [zmenaUkolu, setZmenaUkolu] = useState(DummyData);
+
+  function setStavUkolu(id: number, completed: boolean) {
+    setZmenaUkolu((prevZmenaUkolu) =>
+      prevZmenaUkolu.map((ukoly) =>
+        ukoly.id === id ? { ...ukoly, completed } : ukoly
+      )
+    );
+  }
+
+  function pridaniUkolu(title: string) {
+    setZmenaUkolu((prevZmenaUkolu) => [
+      {
+        id: prevZmenaUkolu.length + 1,
+        title,
+        completed: false,
+      },
+      ...prevZmenaUkolu,
+    ]);
+  }
+
+  function deleteUkol(id: number) {
+    setZmenaUkolu((prevZmenaUkolu) =>
+      prevZmenaUkolu.filter((ukoly) => ukoly.id !== id)
+    );
+  }
+
   return (
-    <main className="py-10 h-screen space-y-5">
+    <main className="py-10 h-screen space-y-5 overflow-y-auto">
       <h1 className="font-bold text-4xl text-center">Úkolníček</h1>
-      <div className="max-w-lg mx-auto bg-slate-200 rounded-md p-5">
-        <div className="space-y-2">
-          {DummyData.map((ukol) => (
-            <Ukol ukoly={ukol} />
-          ))}
-        </div>
+      <div className="max-w-lg mx-auto bg-slate-200 rounded-md p-5 space-y-6">
+        <PridaniUkolu onSubmit={pridaniUkolu} />
+        <UkolList
+          ukoly={zmenaUkolu}
+          stavUkolu={setStavUkolu}
+          onDelete={deleteUkol}
+        />
       </div>
     </main>
   );
