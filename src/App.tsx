@@ -18,7 +18,7 @@ function App() {
   function pridaniUkolu(title: string) {
     setZmenaUkolu((prevZmenaUkolu) => [
       {
-        id: prevZmenaUkolu.length + 1,
+        id: Date.now(),
         title,
         completed: false,
       },
