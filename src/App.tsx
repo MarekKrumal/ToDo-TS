@@ -1,11 +1,21 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { DummyData } from "./data/ukoly";
 import PridaniUkolu from "./components/PridaniUkolu";
 import UkolList from "./components/UkolList";
 import UkolyHromadne from "./components/UkolyHromadne";
+import { Ukoly } from "./types/ukoly";
 
 function App() {
-  const [zmenaUkolu, setZmenaUkolu] = useState(DummyData);
+  const [zmenaUkolu, setZmenaUkolu] = useState(() => {
+    const ulozeneUkoly: Ukoly[] = JSON.parse(
+      localStorage.getItem("ukoly") || "[]"
+    );
+    return ulozeneUkoly.length > 0 ? ulozeneUkoly : DummyData;
+  });
+
+  useEffect(() => {
+    localStorage.setItem("ukoly", JSON.stringify(zmenaUkolu));
+  }, [zmenaUkolu]);
 
   function setStavUkolu(id: number, completed: boolean) {
     setZmenaUkolu((prevZmenaUkolu) =>
