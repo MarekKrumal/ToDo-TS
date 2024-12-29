@@ -2,6 +2,7 @@ import { useState } from "react";
 import { DummyData } from "./data/ukoly";
 import PridaniUkolu from "./components/PridaniUkolu";
 import UkolList from "./components/UkolList";
+import UkolyHromadne from "./components/UkolyHromadne";
 
 function App() {
   const [zmenaUkolu, setZmenaUkolu] = useState(DummyData);
@@ -31,6 +32,12 @@ function App() {
     );
   }
 
+  function deleteVsechnyHotove() {
+    setZmenaUkolu((prevZmenaUkolu) =>
+      prevZmenaUkolu.filter((ukoly) => !ukoly.completed)
+    );
+  }
+
   return (
     <main className="py-10 h-screen space-y-5 overflow-y-auto">
       <h1 className="font-bold text-4xl text-center">Úkolníček</h1>
@@ -42,6 +49,10 @@ function App() {
           onDelete={deleteUkol}
         />
       </div>
+      <UkolyHromadne
+        ukoly={zmenaUkolu}
+        deleteVsechnyHotove={deleteVsechnyHotove}
+      />
     </main>
   );
 }
